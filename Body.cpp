@@ -1,15 +1,13 @@
+#pragma once
+
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include "vector_math.h"
 
 class Body {
 public:
     explicit Body(const size_t size) {
         addBodyParts(size);
-        
-        for (const auto& body : bodyParts) {
-            const sf::Color &color = body.getFillColor();
-            printf("%d, %d, %d \n", color.r, color.g, color.b);
-        }
     }
 
     void addBodyParts(const size_t size) {
@@ -23,10 +21,16 @@ public:
         }
     }
 
+    void setPosition(sf::Vector2f position) {
+        for (auto& bodyPart: bodyParts) {
+            bodyPart.setPosition(position);
+        }
+    }
+
     void updateSize(const float headSize) {
         float size = headSize;
         for(auto& body: bodyParts) {
-            size *= .8;
+            size *= .85;
             body.setRadius(size);
             body.setOrigin(size, size);
         }
@@ -34,11 +38,18 @@ public:
 
     void update(const sf::Vector2f headPosition, const float timeStep) {
         auto position = headPosition;
+        auto nodeSpeed = 150;
 
-        for (auto &bodyPart: bodyParts) {
-            const auto &newPost = position + sf::Vector2{10.0f * timeStep / timeStep, 10.0f};
-            bodyPart.setPosition(newPost);
-            position = newPost;
+        for (auto& bodyPart : bodyParts) {
+            const auto currentPosition = bodyPart.getPosition();
+
+            const auto distance = position - currentPosition;
+            nodeSpeed *= 0.9f;
+
+            const auto direction = mult(normalize(distance), timeStep * nodeSpeed);
+
+            bodyPart.setPosition(currentPosition + direction);
+            position = bodyPart.getPosition();
         }
     }
 

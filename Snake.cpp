@@ -1,30 +1,22 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <cmath>
 #include "Food.cpp"
 #include <iostream>
 #include "Body.cpp"
-
-float length(sf::Vector2f vector) {
-    return std::hypot(vector.x, vector.y);
-}
+#include "vector_math.h"
 
 class Snake : public sf::CircleShape {
 public:
-    Snake(const sf::Vector2f &position, unsigned int size, std::string name) : name(std::move(name)), body(5) {
+    Snake(const sf::Vector2f &position, unsigned int size, std::string name) : name(std::move(name)), body(20) {
         updateRadius((float) size);
         setPosition(position);
         body.updateSize((float) size);
+        body.setPosition(position);
     }
 
-
     void setHeading(const sf::Vector2f target) {
-        const auto distance = target - getPosition();
-        const auto i = length(distance);
-        if (i > 0) {
-            direction = distance / i;
-        }
+        direction = normalize(target - getPosition());
     }
 
     bool eat(const Food &food) {
@@ -61,10 +53,11 @@ public:
     }
 
 private:
-    float speed = 100;
+    float speed = 150;
     sf::Vector2f direction;
     std::string name;
 
     Body body;
+    friend Body;
 };
 

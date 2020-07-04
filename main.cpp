@@ -34,6 +34,9 @@ int main() {
                 width = event.size.width;
                 height = event.size.height;
             }
+            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+                window.close();
+            }
         }
 
         const auto mousePos = sf::Mouse::getPosition(window);
