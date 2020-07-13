@@ -15,7 +15,6 @@ public:
         bodyParts.resize(startIndex + size);
 
         for (size_t i = 0; i < size; i++) {
-            bodyParts[startIndex + i].setFillColor(sf::Color(255, 0, 255));
             bodyParts[startIndex + i].setRadius(10);
             bodyParts[startIndex + i].setOrigin(10, 10);
         }
@@ -44,7 +43,7 @@ public:
             const auto currentPosition = bodyPart.getPosition();
 
             const auto distance = position - currentPosition;
-            nodeSpeed *= 0.9f;
+            nodeSpeed *= 0.95f;
 
             const auto direction = mult(normalize(distance), timeStep * nodeSpeed);
 

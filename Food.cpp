@@ -6,9 +6,15 @@
 class Food : public sf::CircleShape {
 public:
     Food() {
-        setFillColor(sf::Color::Red);
         setOrigin(size, size);
         setRadius(size);
+
+        texture = std::make_unique<sf::Texture>();
+        texture->loadFromFile("../food.png");
+
+        sprite = sf::Sprite(*texture);
+        sprite.setScale(.25, .25);
+        sprite.setPosition(100, 25);
     }
 
     void seed(const unsigned int WIDTH, const unsigned int HEIGHT) {
@@ -20,6 +26,13 @@ public:
         setPosition(distW(rng),distH(rng));
     }
 
+    void drawFood(sf::RenderWindow &window) const
+    {
+        window.draw(sprite);
+    }
+
 private:
     constexpr const static float size = 5;
+    std::unique_ptr<sf::Texture> texture;
+    sf::Sprite sprite;
 };

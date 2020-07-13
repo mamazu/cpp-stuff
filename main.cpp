@@ -9,7 +9,7 @@ std::vector<Food> instanciateFoods(const size_t count, const unsigned int width,
     for (size_t i = 0; i < count; ++i) {
         Food food;
         food.seed(width, height);
-        foods[i] = food;
+        foods[i] = std::move(food);
     }
 
     return foods;
@@ -22,7 +22,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(width, height), "Snake something");
     Snake snake{sf::Vector2f{(float) width / 2, (float) height / 2}, 10, "Player"};
 
-    auto foods = instanciateFoods(100, width, height);
+    auto foods = instanciateFoods(1, width, height);
     sf::Clock clock;
 
     while (window.isOpen()) {
@@ -34,7 +34,7 @@ int main() {
                 width = event.size.width;
                 height = event.size.height;
             }
-            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 window.close();
             }
         }
@@ -57,8 +57,8 @@ int main() {
 
         // Drawing logic
         window.clear(sf::Color(0, 0, 255));
-        for (auto &food: foods) {
-            window.draw(food);
+        for (const auto &food: foods) {
+            food.drawFood(window);
         }
         snake.drawSnake(window);
 
