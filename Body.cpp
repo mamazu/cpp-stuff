@@ -21,14 +21,14 @@ public:
     }
 
     void setPosition(sf::Vector2f position) {
-        for (auto& bodyPart: bodyParts) {
-            bodyPart.setPosition(position);
+        for (size_t i = 0; i < bodyParts.size(); ++i) {
+            bodyParts[i].setPosition(position + mult(sf::Vector2f(10, 10), (float) i));
         }
     }
 
     void updateSize(const float headSize) {
         float size = headSize;
-        for(auto& body: bodyParts) {
+        for (auto &body: bodyParts) {
             size *= .85;
             body.setRadius(size);
             body.setOrigin(size, size);
@@ -39,16 +39,21 @@ public:
         auto position = headPosition;
         auto nodeSpeed = 150;
 
-        for (auto& bodyPart : bodyParts) {
+        for (size_t i = 0; i < bodyParts.size(); ++i) {
+            auto &bodyPart = bodyParts[i];
             const auto currentPosition = bodyPart.getPosition();
 
-            const auto distance = position - currentPosition;
-            nodeSpeed *= 0.95f;
+            const auto direction = position - currentPosition;
 
-            const auto direction = mult(normalize(distance), timeStep * nodeSpeed);
+            nodeSpeed *= 0.98f;
+            const auto rescaledDirection = mult(normalize(direction), timeStep * nodeSpeed);
 
-            bodyPart.setPosition(currentPosition + direction);
-            position = bodyPart.getPosition();
+            const auto &new_position = currentPosition + rescaledDirection;
+            const auto previousRadius = (i > 1) ? bodyParts[i - 1].getRadius() : 0;
+            if (length(direction) >= (bodyPart.getRadius() + previousRadius)) {
+                bodyPart.setPosition(new_position);
+            }
+            position = new_position;
         }
     }
 

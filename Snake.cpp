@@ -8,7 +8,7 @@
 
 class Snake : public sf::CircleShape {
 public:
-    Snake(const sf::Vector2f &position, unsigned int size, std::string name) : name(std::move(name)), body(20) {
+    Snake(const sf::Vector2f &position, unsigned int size, std::string name) : name(std::move(name)), body(10) {
         updateRadius((float) size);
         setPosition(position);
         body.updateSize((float) size);
