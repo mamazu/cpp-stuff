@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "Snake.cpp"
-#include "Food.cpp"
+#include "Food.hpp"
 
 std::vector<Food> instanciateFoods(const size_t count, const unsigned int width, const unsigned int height) {
     std::vector<Food> foods;
@@ -63,7 +63,6 @@ int main() {
         snake.drawSnake(window);
 
         window.display();
-
     }
 
     return 0;

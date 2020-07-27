@@ -1,38 +1,27 @@
-#pragma once
-
 #include <SFML/Graphics.hpp>
-#include <random>
+#include "Food.hpp"
 
-class Food : public sf::CircleShape {
-public:
-    Food() {
-        setOrigin(size, size);
-        setRadius(size);
+Food::Food() {
+    setOrigin(size, size);
+    setRadius(size);
 
-        texture = std::make_unique<sf::Texture>();
-        texture->loadFromFile("../food.png");
+    texture = std::make_unique<sf::Texture>();
+    texture->loadFromFile("../food.png");
 
-        sprite = sf::Sprite(*texture);
-        sprite.setScale(.25, .25);
-        sprite.setPosition(100, 25);
-    }
+    sprite = sf::Sprite(*texture);
+    sprite.setScale(.25, .25);
+    sprite.setPosition(100, 25);
+}
 
-    void seed(const unsigned int WIDTH, const unsigned int HEIGHT) {
-        std::random_device dev;
-        std::mt19937 rng(dev());
-        std::uniform_real_distribution<double> distW(1, WIDTH);
-        std::uniform_real_distribution<double> distH(1, HEIGHT);
+void Food::drawFood(sf::RenderWindow &window) const {
+#if DEBUG
+        static const auto hitBox = getHitBox();
+        static sf::RectangleShape hitBoxShape{{hitBox.width, hitBox.height}};
+        hitBoxShape.setPosition(hitBox.left, hitBox.top);
+        hitBoxShape.setOrigin(0, 0);
+        window.draw(hitBoxShape);
+#endif
 
-        setPosition(distW(rng),distH(rng));
-    }
+    window.draw(sprite);
+}
 
-    void drawFood(sf::RenderWindow &window) const
-    {
-        window.draw(sprite);
-    }
-
-private:
-    constexpr const static float size = 5;
-    std::unique_ptr<sf::Texture> texture;
-    sf::Sprite sprite;
-};

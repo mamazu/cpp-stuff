@@ -1,7 +1,5 @@
-#pragma once
-
 #include <SFML/Graphics.hpp>
-#include "Food.cpp"
+#include "Food.hpp"
 #include <iostream>
 #include "Body.cpp"
 #include "vector_math.h"
@@ -20,7 +18,7 @@ public:
     }
 
     bool eat(const Food &food) {
-        const bool overlaps = overlapsCircle(food);
+        auto overlaps = food.getHitBox().intersects(getGlobalBounds());
         if (overlaps) {
             updateRadius(getRadius() + 2);
             speed = std::max(speed * 0.98, 20.0);
@@ -33,12 +31,6 @@ public:
         setRadius(radius);
         setOrigin(radius, radius);
         body.updateSize(getRadius());
-    }
-
-    bool overlapsCircle(const sf::CircleShape &shape) {
-        const auto distance = length(shape.getPosition() - getPosition());
-
-        return (distance < getRadius() + shape.getRadius());
     }
 
     void update(const float timeStep) {

@@ -3,8 +3,13 @@ project(platformer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(platformer main.cpp)
-target_compile_options(platformer PRIVATE -Werror -Wall -Wextra -Wpedantic)
+file(GLOB SOURCES
+        *.cpp
+        *.hpp
+)
+add_executable(platformer ${SOURCES})
+
+target_compile_options(platformer PRIVATE -Werror -Wall -Wextra -Wpedantic -DDEBUG=1)
 
 target_link_libraries(platformer PRIVATE sfml-graphics)
 target_link_libraries(platformer PRIVATE sfml-window)
