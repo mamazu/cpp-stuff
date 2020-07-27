@@ -48,6 +48,7 @@ int main() {
 
         for (auto &food : foods) {
             if (snake.eat(food)) {
+                puts("I am eating");
                 food.seed(width, height);
             }
         }

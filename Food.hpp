@@ -2,18 +2,19 @@
 
 #include <SFML/Graphics.hpp>
 #include <random>
+#include "vector_math.h"
 
-class Food : public sf::CircleShape {
+class Food {
 public:
     Food();
 
     void seed(const unsigned int WIDTH, const unsigned int HEIGHT) {
-        std::random_device dev;
-        std::mt19937 rng(dev());
-        std::uniform_real_distribution<double> distW(1, WIDTH);
-        std::uniform_real_distribution<double> distH(1, HEIGHT);
+        static std::random_device dev;
+        static std::mt19937 rng(dev());
+        static std::uniform_real_distribution<double> distW(1, WIDTH);
+        static std::uniform_real_distribution<double> distH(1, HEIGHT);
 
-        setPosition(distW(rng),distH(rng));
+        sprite.setPosition(distW(rng), distH(rng));
     }
 
     sf::Rect<float> getHitBox() const {
