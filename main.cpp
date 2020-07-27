@@ -2,6 +2,7 @@
 #include <vector>
 #include "Snake.cpp"
 #include "Food.hpp"
+#include "GUI.h"
 
 std::vector<Food> instanciateFoods(const size_t count, const unsigned int width, const unsigned int height) {
     std::vector<Food> foods;
@@ -21,6 +22,7 @@ int main() {
 
     sf::RenderWindow window(sf::VideoMode(width, height), "Snake something");
     Snake snake{sf::Vector2f{(float) width / 2, (float) height / 2}, 10, "Player"};
+    GUI gui;
 
     auto foods = instanciateFoods(1, width, height);
     sf::Clock clock;
@@ -48,8 +50,8 @@ int main() {
 
         for (auto &food : foods) {
             if (snake.eat(food)) {
-                puts("I am eating");
                 food.seed(width, height);
+                gui.score++;
             }
         }
 
@@ -62,6 +64,8 @@ int main() {
             food.drawFood(window);
         }
         snake.drawSnake(window);
+
+        gui.drawGUI(window);
 
         window.display();
     }

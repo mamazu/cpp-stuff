@@ -16,6 +16,9 @@ void Food::drawFood(sf::RenderWindow &window) const {
         sf::RectangleShape hitBoxShape{{hitBox.width, hitBox.height}};
         hitBoxShape.setPosition(hitBox.left, hitBox.top);
         hitBoxShape.setOrigin(0, 0);
+        hitBoxShape.setOutlineColor(sf::Color::Red);
+        hitBoxShape.setFillColor(sf::Color::Transparent);
+        hitBoxShape.setOutlineThickness(2);
         window.draw(hitBoxShape);
 #endif
 
