@@ -1,16 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 project(platformer)
 
-set(CMAKE_CXX_STANDARD 17)
+enable_testing()
 
-file(GLOB SOURCES
-        *.cpp
-        *.hpp
-)
-add_executable(platformer ${SOURCES})
+set(CMAKE_CXX_STANDARD 20)
 
-target_compile_options(platformer PRIVATE -Werror -Wall -Wextra -Wpedantic -DDEBUG=1)
-
-target_link_libraries(platformer PRIVATE sfml-graphics)
-target_link_libraries(platformer PRIVATE sfml-window)
-target_link_libraries(platformer PRIVATE sfml-system)
+add_subdirectory(src)
+add_subdirectory(tests)
