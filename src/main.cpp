@@ -1,8 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Grid.h"
 #include "Renderer.h"
-#include "Solver.h"
+#include "Grid.h"
+#include "Animator.hpp"
 
 constexpr size_t GRID_WIDTH = 4;
 constexpr size_t GRID_HEIGHT = 4;
@@ -14,49 +14,9 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(width, height), "Swapper");
 
     Grid<GRID_WIDTH, GRID_HEIGHT> grid(0, 0);
-    for(size_t i = 0; i < 100; i++) {
-        switch((rand() % 4)) {
-            case 0:
-                grid.swap(NORTH);
-                break;
-            case 1:
-                grid.swap(EAST);
-                break;
-            case 2:
-                grid.swap(SOUTH);
-                break;
-            case 3:
-                grid.swap(WEST);
-                break;
-        }
-    }
 
     Renderer renderer;
-    Solver solver;
-
-    const Moves &vector = solver.solve(grid);
-    printf("Moves: %i", (int) vector.size());
-    for(auto move: vector) {
-        auto moveString = "";
-        switch (move) {
-            case NORTH:
-                moveString =  "North";
-                break;
-            case EAST:
-                moveString =  "East";
-                break;
-            case WEST:
-                moveString =  "West";
-                break;
-            case SOUTH:
-                moveString =  "South";
-                break;
-            default:
-                moveString =  "Nope";
-        }
-
-        puts(moveString);
-    }
+    Animator animator;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -81,9 +41,20 @@ int main() {
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                 grid.swap(SOUTH);
             }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+                animator.solve(grid);
+            }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Add)){
+                animator.increaseSpeed();
+            }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract)){
+                animator.decreaseSpeed();
+            }
         }
 
+        animator.update(grid);
         window.clear();
+        renderer.setMovesLeft(animator.getMovesLeft());
         renderer.render(window, grid);
         window.display();
     }
